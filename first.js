@@ -1,4 +1,5 @@
-import {evenOdd,add} from './modules.js'
+import {evenOdd} from './modules.js'
+import {add,sub,mul,div,modulus} from './calc.js'
 
 
 var a = 21;

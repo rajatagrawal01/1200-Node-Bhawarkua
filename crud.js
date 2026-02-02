@@ -2,8 +2,8 @@ const { connectDB ,client} =require("./mongo-db")
 
 connectDB()
 
-const db = client.db("MERN");
-const records = db.collection("Records");
+const db = client.db("Records");
+const records = db.collection("tttt");
 
 async function insertData(data) {
   try {
@@ -44,7 +44,7 @@ async function deleteData() {
   }
 }
 
-insertData([{ name: "Raxx", age: 25 },{ name: "Raxx", age: 30 }])
-fetchData()
-updateData()
-// deleteData()
+// insertData([{ name: "Raxx", age: 25 },{ name: "Raxx", age: 30 }])
+// fetchData()
+// updateData()
+deleteData()

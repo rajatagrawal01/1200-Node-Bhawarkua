@@ -1,34 +1,47 @@
-const fs=require('fs');
-const os = require('os')
+const express = require("express");
+const mongoose = require("mongoose");
 
-/// Get the CPU architecture
-// console.log('CPU Architecture:', os.arch());
+const app = express();
+app.use(express.json());
 
-// // Get the amount of free system memory in bytes
-console.log('Free Memory (bytes):', os.freemem());
+mongoose.connect("mongodb://127.0.0.1:27017/testdb")
+  .then(() => console.log("MongoDB Connected"))
+  .catch(err => console.log(err));
 
-// // Get the path to the current user's home directory
-// console.log('Home Directory:', os.homedir());
+const User = mongoose.model("User", {
+  name: String,
+  email: String
+});
 
-// // Get the hostname of the operating system
-// console.log('Hostname:', os.hostname());
+app.post("/users", async (req, res) => {
+  const user = await User.create(req.body);
+  // console.log(req)
+  res.json(user);
+});
 
-// // Get information about network interfaces
-// console.log('Network Interfaces:', os.networkInterfaces());
+app.get("/users", async (req, res) => {
+  const users = await User.find();
+  res.json(users);
+});
 
-// // Get the operating system platform (e.g., 'linux', 'darwin', 'win32')
-console.log('OS Platform:', os.platform());
+app.get("/users/:id", async (req, res) => {
+  const user = await User.findById(req.params.id);
+  res.json(user);
+});
 
-// // Get the operating system release
-// console.log('OS Release:', os.release());
+app.put("/users/:id", async (req, res) => {
+  const user = await User.findByIdAndUpdate(
+    req.params.id,
+    req.body, 
+    { new: true }
+  );
+  console.log("put request", req)
+  res.json(user);
+});
 
-// // Get the total amount of system memory in bytes
-// console.log('Total Memory (bytes):', os.totalmem());
+app.delete("/users/:id", async (req, res) => {
+  await User.findByIdAndDelete(req.params.id);
+  res.json({ message: "Deleted" });
+});
 
-// // Get the system uptime in seconds
-console.log('System Uptime (seconds):', os.uptime());
-
-// // Get information about each CPU/core
-console.log('CPU Information:', os.cpus().length);
-
-// console.log(os.cpus());
+app.listen(5000, () => console.log("Server running on port 5000"));
